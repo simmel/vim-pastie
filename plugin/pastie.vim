@@ -308,7 +308,7 @@ function! s:PastieWrite(file)
     endif
     silent exe "write ".tmp
     let result = ""
-    let rubycmd = 'obj = Net::HTTP.start(%{'.s:domain.'}){|h|h.post(%{'.url.'}, %q{'.method.'paste[parser]='.parser.pdn.'&paste[authorization]=burger&paste[key]=&paste[body]=} + File.read(%q{'.tmp.'}).gsub(/^(.*?) *#\!\! *#{36.chr}/,%{!\!}+92.chr+%{1}).gsub(/[^a-zA-Z0-9_.-]/n) {|s| %{%%%02x} % s[0]},{%{Cookie} => %{'.s:cookies().'}})}; print obj[%{Location}].to_s+%{ }+obj[%{Set-Cookie}].to_s'
+    let rubycmd = 'obj = Net::HTTP.start(%{'.s:domain.'}){|h|h.post(%{'.url.'}, %q{'.method.'paste[parser]='.parser.pdn.'&paste[authorization]=burger&paste[key]=&paste[body]=} + File.read(%q{'.tmp.'}).gsub(/^(.*?) *#\!\! *#{36.chr}/,%{!\!}+92.chr+%{1}).gsub(/[^a-zA-Z0-9_.-]/n) {|s| %{%%%02x} % (s.ord rescue s[0])},{%{Cookie} => %{'.s:cookies().'}})}; print obj[%{Location}].to_s+%{ }+obj[%{Set-Cookie}].to_s'
     let result = system('ruby -rnet/http -e "'.rubycmd.'"')
     let redirect = matchstr(result,'^[^ ]*')
     let cookies  = matchstr(result,'^[^ ]* \zs.*')
