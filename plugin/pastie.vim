@@ -8,18 +8,20 @@ if exists("g:loaded_pastie") || &cp
 endif
 let g:loaded_pastie = 1
 
-let g:pastie_private = 0
+if !exists("g:pastie_private")
+    let g:pastie_private = 0
+endif
 
 augroup pastie
     autocmd!
-    autocmd BufReadPre  http://pastie.org/*[0-9]?key=*           call s:extractcookies(expand("<amatch>"))
-    autocmd BufReadPost http://pastie.org/*[0-9]?key=*           call s:PastieSwapout(expand("<amatch>"))
-    autocmd BufReadPost http://pastie.org/*[0-9]                 call s:PastieSwapout(expand("<amatch>"))
-    autocmd BufReadPost http://pastie.org/pastes/*[0-9]/download call s:PastieRead(expand("<amatch>"))
-    autocmd BufReadPost http://pastie.org/*[0-9].*               call s:PastieRead(expand("<amatch>"))
-    autocmd BufWriteCmd http://pastie.org/pastes/*[0-9]/download call s:PastieWrite(expand("<amatch>"), g:pastie_private)
-    autocmd BufWriteCmd http://pastie.org/*[0-9].*               call s:PastieWrite(expand("<amatch>"), g:pastie_private)
-    autocmd BufWriteCmd http://pastie.org/pastes/                call s:PastieWrite(expand("<amatch>"), g:pastie_private)
+    autocmd BufReadPre  http://pastie.org/*[0-9]?key=*              call s:extractcookies(expand("<amatch>"))
+    autocmd BufReadPost http://pastie.org/*[0-9]?key=*              call s:PastieSwapout(expand("<amatch>"))
+    autocmd BufReadPost http://pastie.org/*[0-9]                    call s:PastieSwapout(expand("<amatch>"))
+    autocmd BufReadPost http://pastie.org/pastes/*[0-9]/download    call s:PastieRead(expand("<amatch>"))
+    autocmd BufReadPost http://pastie.org/*[0-9].*                  call s:PastieRead(expand("<amatch>"))
+    autocmd BufWriteCmd http://pastie.org/pastes/*[0-9a-f]/download call s:PastieWrite(expand("<amatch>"), g:pastie_private)
+    autocmd BufWriteCmd http://pastie.org/*[0-9a-f].*               call s:PastieWrite(expand("<amatch>"), g:pastie_private)
+    autocmd BufWriteCmd http://pastie.org/pastes/                   call s:PastieWrite(expand("<amatch>"), g:pastie_private)
 
     autocmd BufReadPre  http://pastie.caboo.se/*[0-9]?key=*           call s:extractcookies(expand("<amatch>"))
     autocmd BufReadPost http://pastie.caboo.se/*[0-9]?key=*           call s:PastieSwapout(expand("<amatch>"))
