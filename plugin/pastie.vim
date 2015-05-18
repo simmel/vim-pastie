@@ -1,5 +1,5 @@
 " pastie.vim - Interface for pastie.org
-" Maintainer:   Tim Pope <vimNOSPAM@tpope.org>
+" Author:       Tim Pope <http://tpo.pe/>
 " URL:          http://www.vim.org/scripts/script.php?script_id=1624
 " GetLatestVimScripts: 1624 1 :AutoInstall: pastie.vim
 
