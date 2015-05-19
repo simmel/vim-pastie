@@ -1,6 +1,7 @@
 *pastie.txt*  Interface for pastie.org
 
 Author:  Tim Pope <http://tpo.pe/>
+Maintainer: Simon Lundström <simmel@soy.se>
 License: Same terms as Vim itself (see |license|)
 
 This plugin is only available if 'compatible' is not set.
