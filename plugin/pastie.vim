@@ -150,11 +150,13 @@ function! s:Pastie(bang,line1,line2,count,...)
         windo let tmp = s:grabwin() | if tmp != "" | let cnt = cnt + 1 | let sum = sum . tmp | end
         let sum = substitute(sum,'\n\+$',"\n",'')
         if cnt == 1
-            let ft = matchstr(sum,'^##.\{-\} \[\zs\w*\ze\]')
+            let ft = matchstr(sum,'^##.\{-\} \[\zs.\{-\}\ze\]')
             if ft != ""
-                let sum = substitute(sum,'^##.\{-\} \[\w*\]\n','','')
+                let sum = substitute(sum,'^##.\{-\} \[.\{-\}\]\n','','')
             endif
         endif
+        let keep_ft_ignore_pat = g:ft_ignore_pat
+        let g:ft_ignore_pat = '.*'
         call s:newwindow()
         silent exe "file ".newfile
         "silent exe "doautocmd BufReadPre ".newfile
@@ -170,6 +172,7 @@ function! s:Pastie(bang,line1,line2,count,...)
         endif
         let @" = keep
         call s:dobufreadpost()
+        let g:ft_ignore_pat = keep_ft_ignore_pat
     else
         let keep = @"
         let args = ""
@@ -290,7 +293,7 @@ function! s:afterload()
 endfunction
 
 function! s:PastieWrite(file, ...)
-    let parser = s:parser(&ft)
+    let parser = s:urlencode(s:parser(&ft))
     let tmp = tempname()
     let num = matchstr(a:file,'/\@<!/\zs\d\+')
     if num == ''
@@ -472,7 +475,7 @@ endfunction
 
 function! s:urlencode(str)
     " Vim 6.2, how did we ever live with you?
-    return substitute(substitute(a:str,"[\001-\037%&?=\\\\]",'\="%".printf("%02X",char2nr(submatch(0)))','g'),' ','%20','g')
+    return substitute(substitute(a:str,"[\001-\037%&?=+\\\\]",'\="%".printf("%02X",char2nr(submatch(0)))','g'),' ','%20','g')
 endfunction
 
 function! s:newwindow()
